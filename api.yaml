@@ -1,0 +1,80 @@
+openapi: 3.0.3
+info: 
+  title: Revision API
+  version: 1.0.0
+servers:
+    - url: http://localhosT
+      description: local server
+paths:
+  /books:
+    get:
+      summary: get all books
+      description: return the books ordered by author
+      operationId: getBooks
+      parameters:
+        - in: query
+          name: book name
+          description: Filter the return books by the given name
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: The return books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    put:
+      summary: Create or update the list of books
+      operationId: crupdateBook
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+      responses:
+        200:
+          description: list of the modified list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    CreateBook:
+      type: object
+      properties:
+        bookName:
+          type: string
+          example: Lovako
+        codeBook:
+          type: string
+          example: BOOK23001
+        author:
+          type: string
+        realeseDate:
+          type: string
+          format: date
+        topic:
+          $ref: '#/components/schemas/Topic'
+    Book:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/CreateBook'
+      properties:
+        id:
+          type: string
+    Topic:
+      type: string
+      enum:
+        - ROMANCE
+        - COMEDY
+        - OTHER
